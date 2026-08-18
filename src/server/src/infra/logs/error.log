@@ -195,3 +195,5 @@
 [2026-06-01T09:19:49.632Z] [31MERROR[39M: Invalid access token, please log in
 [2026-06-01T09:20:08.442Z] [31MERROR[39M: Invalid access token, please log in
 [2026-06-01T09:20:08.558Z] [31MERROR[39M: Invalid access token, please log in
+[2026-08-18T06:51:10.579Z] [31MERROR[39M: Unauthorized, please log in
+[2026-08-18T06:51:10.931Z] [31MERROR[39M: Refresh token not found
