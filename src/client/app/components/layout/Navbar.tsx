@@ -69,7 +69,7 @@ const Navbar = () => {
               href="/"
               className="font-medium text-lg sm:text-xl lg:text-xl text-gray-900 flex-shrink-0"
             >
-              ecom
+              guy's ecom
             </Link>
 
             {/* Desktop Search Bar */}
