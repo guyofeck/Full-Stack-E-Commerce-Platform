@@ -24,7 +24,7 @@ const Footer = () => {
               href="/"
               className="text-lg font-semibold text-gray-900 hover:text-indigo-600"
             >
-              Ecommerce
+              ecom
             </Link>
             <p className="mt-2 max-w-sm text-sm leading-relaxed">
               Open-source demo store. Run locally — no hosted demo is maintained.
@@ -58,7 +58,7 @@ const Footer = () => {
         </div>
 
         <div className="mt-8 pt-6 border-t border-gray-200 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between text-sm">
-          <p>© {currentYear} Ecommerce. Open source under MIT.</p>
+          <p>© {currentYear} ecom. Open source under MIT.</p>
           <p>
             Developed by{" "}
             <a
