@@ -1,0 +1,108 @@
+# Base44 dev environment: runs client + server from the cloned source with live reload.
+# Browser talks only to :3000; Next.js proxies /api/v1/* to the API (same-origin cookies).
+# Socket.IO chat connects directly to the API's public :5000 URL.
+name: ecommerce-base44
+
+services:
+  db:
+    image: postgres:15
+    restart: on-failure
+    environment:
+      POSTGRES_USER: ecommerce
+      POSTGRES_PASSWORD: ecommerce_dev_pw
+      POSTGRES_DB: b2c_ecommerce
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ecommerce -d b2c_ecommerce"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7
+    restart: on-failure
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # One-shot: install server deps + apply Prisma migrations.
+  server-setup:
+    image: node:22
+    working_dir: /app
+    environment:
+      DATABASE_URL: postgresql://ecommerce:ecommerce_dev_pw@db:5432/b2c_ecommerce
+    volumes:
+      - ./src/server:/app
+      - server_node_modules:/app/node_modules
+    command: ["sh", "-ec", "npm ci --no-audit --no-fund && npx prisma generate && npx prisma migrate deploy"]
+    depends_on:
+      db:
+        condition: service_healthy
+
+  server:
+    image: node:22
+    restart: on-failure
+    working_dir: /app
+    ports:
+      - "5000:5000"
+    env_file:
+      - /run/base44/app.env
+    environment:
+      NODE_ENV: development
+      PORT: "5000"
+      DATABASE_URL: postgresql://ecommerce:ecommerce_dev_pw@db:5432/b2c_ecommerce
+      REDIS_URL: redis://redis:6379
+      ALLOWED_ORIGINS: https://3000-${BASE44_PUBLIC_HOST_SUFFIX},http://localhost:3000
+      CLIENT_URL_DEV: https://3000-${BASE44_PUBLIC_HOST_SUFFIX}
+    volumes:
+      - ./src/server:/app
+      - server_node_modules:/app/node_modules
+    command: ["sh", "-ec", "exec npx nodemon --legacy-watch"]
+    depends_on:
+      server-setup:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:5000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 4
+      start_period: 90s
+
+  client:
+    image: node:22
+    restart: on-failure
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      WATCHPACK_POLLING: "true"
+      BASE44_PUBLIC_HOST_SUFFIX: ${BASE44_PUBLIC_HOST_SUFFIX}
+      API_PROXY_TARGET: http://server:5000
+      NEXT_PUBLIC_API_URL_DEV: /api/v1
+      NEXT_PUBLIC_SOCKET_URL: https://5000-${BASE44_PUBLIC_HOST_SUFFIX}
+    volumes:
+      - ./src/client:/app
+      - client_node_modules:/app/node_modules
+      - client_next:/app/.next
+    command: ["sh", "-ec", "npm ci --no-audit --no-fund && exec npx next dev -H 0.0.0.0 -p 3000"]
+    depends_on:
+      server:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/').then(r=>process.exit(r.status<500?0:1)).catch(()=>process.exit(1))"]
+      interval: 20s
+      timeout: 15s
+      retries: 5
+      start_period: 240s
+
+volumes:
+  pgdata:
+  server_node_modules:
+  client_node_modules:
+  client_next:

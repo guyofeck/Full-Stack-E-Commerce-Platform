@@ -1,0 +1,24 @@
+{
+  "previewPort": 3000,
+  "healthPath": "/",
+  "startCommand": "docker compose -f docker-compose.base44.yml up -d",
+  "secrets": [
+    { "name": "ACCESS_TOKEN_SECRET", "description": "JWT access-token signing secret (any random string)", "requiredAtBoot": true, "generatedForDevelopment": true },
+    { "name": "REFRESH_TOKEN_SECRET", "description": "JWT refresh-token signing secret (any random string)", "requiredAtBoot": true, "generatedForDevelopment": true },
+    { "name": "SESSION_SECRET", "description": "express-session secret (any random string)", "requiredAtBoot": true, "generatedForDevelopment": true },
+    { "name": "COOKIE_SECRET", "description": "cookie-parser signing secret (any random string)", "requiredAtBoot": true, "generatedForDevelopment": true },
+    { "name": "STRIPE_SECRET_KEY", "description": "Stripe secret key (dashboard.stripe.com > Developers > API keys) — needed for checkout", "requiredAtBoot": true, "generatedForDevelopment": true },
+    { "name": "STRIPE_WEBHOOK_SECRET", "description": "Stripe webhook signing secret — needed for order confirmation webhooks", "requiredAtBoot": false },
+    { "name": "GOOGLE_CLIENT_ID", "description": "Google OAuth client ID (console.cloud.google.com > Credentials)", "requiredAtBoot": true, "generatedForDevelopment": true },
+    { "name": "GOOGLE_CLIENT_SECRET", "description": "Google OAuth client secret", "requiredAtBoot": true, "generatedForDevelopment": true },
+    { "name": "FACEBOOK_APP_ID", "description": "Facebook app ID (developers.facebook.com)", "requiredAtBoot": true, "generatedForDevelopment": true },
+    { "name": "FACEBOOK_APP_SECRET", "description": "Facebook app secret", "requiredAtBoot": true, "generatedForDevelopment": true },
+    { "name": "TWITTER_CONSUMER_KEY", "description": "Twitter/X API consumer key (developer.x.com)", "requiredAtBoot": true, "generatedForDevelopment": true },
+    { "name": "TWITTER_CONSUMER_SECRET", "description": "Twitter/X API consumer secret", "requiredAtBoot": true, "generatedForDevelopment": true },
+    { "name": "CLOUDINARY_CLOUD_NAME", "description": "Cloudinary cloud name — needed for product image uploads", "requiredAtBoot": false },
+    { "name": "CLOUDINARY_API_KEY", "description": "Cloudinary API key", "requiredAtBoot": false },
+    { "name": "CLOUDINARY_API_SECRET", "description": "Cloudinary API secret", "requiredAtBoot": false },
+    { "name": "EMAIL_USER", "description": "SMTP sender address — needed for password-reset emails", "requiredAtBoot": false },
+    { "name": "EMAIL_PASS", "description": "SMTP app password", "requiredAtBoot": false }
+  ]
+}
