@@ -13,3 +13,5 @@
 
 ## Verify
 - `curl localhost:3000/` → 200; `curl localhost:3000/api/v1/products` → JSON; `curl localhost:5000/health`.
+- The home page reads GraphQL, not the REST product list. Verify `/api/v1/graphql` through port 3000 with `query { products(first:100) { products { name isFeatured isTrending isNew isBestSeller variants { price stock } } } }` to confirm its actual data path.
+- The sandbox database already contains 10 demo products spanning all four home-page sections; preserve them rather than rerunning the destructive seed. Demo variants currently have no photos, so cards use the existing generated placeholders.
