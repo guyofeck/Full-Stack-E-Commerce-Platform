@@ -13,3 +13,6 @@
 
 ## Verify
 - `curl localhost:3000/` → 200; `curl localhost:3000/api/v1/products` → JSON; `curl localhost:5000/health`.
+- The preview database was seeded with 10 products / 17 variants after confirming both Product and User tables were empty. Do not rerun the destructive seed over existing data. Seed variants have no images; the storefront uses its existing placeholders.
+- Compose passes through `BASE44_PREVIEW_MODE`. Only when it is exactly `"1"` does Next.js allow the generated preview origin (`3000-${BASE44_PUBLIC_HOST_SUFFIX}`) for development assets/HMR. With the flag unset, this sandbox-only allowlist is not added; the optional API proxy continues to follow `API_PROXY_TARGET`.
+- This checkout has no automated test script. Verify the catalog against the real `/api/v1/products` API and confirm flagged products appear in Featured, Trending, New Arrivals, and Best Sellers on `/`.

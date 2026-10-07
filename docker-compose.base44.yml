@@ -82,6 +82,7 @@ services:
     environment:
       NODE_ENV: development
       WATCHPACK_POLLING: "true"
+      BASE44_PREVIEW_MODE:
       BASE44_PUBLIC_HOST_SUFFIX: ${BASE44_PUBLIC_HOST_SUFFIX}
       API_PROXY_TARGET: http://server:5000
       NEXT_PUBLIC_API_URL_DEV: /api/v1
