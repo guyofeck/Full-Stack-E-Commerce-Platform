@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import ProductImageGallery from "../ProductImageGallery";
 import ProductInfo from "../ProductInfo";
 import ProductReviews from "../ProductReviews";
+import RecentlyViewed from "../RecentlyViewed";
 import { generateProductPlaceholder } from "@/app/utils/placeholderImage";
 import ProductDetailSkeletonLoader from "@/app/components/feedback/ProductDetailSkeletonLoader";
 import { Product } from "@/app/types/productTypes";
@@ -143,6 +144,8 @@ const ProductDetailsPage = () => {
             <ProductReviews reviews={product.reviews} productId={product.id} />
           </div>
         </div>
+
+        <RecentlyViewed product={product} />
       </div>
     </MainLayout>
   );
